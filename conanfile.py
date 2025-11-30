@@ -96,9 +96,9 @@ class ZenohCConan(ConanFile):
         cmake.build()
 
     def _iceoryx2_lib_name(self):
-        name = "iceoryx2"
-        if self.settings.build_type == "Debug":
-            name += "d"
+        name = "iceoryx2_ffi_c"
+        # if self.settings.build_type == "Debug":
+        #     name += "d"
         return name
 
     def package(self):
