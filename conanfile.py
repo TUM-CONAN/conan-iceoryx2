@@ -130,3 +130,4 @@ class ZenohCConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = [self._iceoryx2_lib_name()]
+        self.cpp_info.includedirs.append(os.path.join("include", "iceoryx2", f"v{self.version}"))
