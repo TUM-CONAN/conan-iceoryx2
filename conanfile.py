@@ -102,6 +102,12 @@ class ZenohCConan(ConanFile):
         #     name += "d"
         return name
 
+    def _iceoryx2_bb_cxx_lib_name(self):
+        name = "iceoryx2-bb-cxx"
+        # if self.settings.build_type == "Debug":
+        #     name += "d"
+        return name
+
     def _iceoryx2_c_lib_name(self):
         name = "iceoryx2_ffi_c"
         # if self.settings.build_type == "Debug":
@@ -156,5 +162,5 @@ class ZenohCConan(ConanFile):
                     # copy(self, "*.lib", lib_build_path, os.path.join(self.package_folder, "lib"), keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = [self._iceoryx2_c_lib_name(), self._iceoryx2_cxx_lib_name()]
+        self.cpp_info.libs = [self._iceoryx2_c_lib_name(), self._iceoryx2_bb_cxx_lib_name(), self._iceoryx2_cxx_lib_name()]
         self.cpp_info.includedirs.append(os.path.join("include", "iceoryx2", f"v{self.version}"))
