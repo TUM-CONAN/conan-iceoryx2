@@ -38,7 +38,7 @@ class ZenohCConan(ConanFile):
     def export(self):
         update_conandata(self, {"sources": {
             # "commit": "v{}".format(self.version),
-            "commit": "main",
+            "commit": "196c471bd2732ca1a53766c71223e36cba0eaaae",  # dec 2nd, 2025
             "url": "https://github.com/eclipse-iceoryx/iceoryx2.git"
             }}
             )
