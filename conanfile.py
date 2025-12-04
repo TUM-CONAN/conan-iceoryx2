@@ -1,14 +1,14 @@
 import os
 from textwrap import dedent
 from conan import ConanFile
-from conan.tools.files import update_conandata, copy, rm, chdir, mkdir, collect_libs, replace_in_file, save, rename
+from conan.tools.files import apply_conandata_patches, export_conandata_patches, update_conandata, copy, rm, chdir, mkdir, collect_libs, replace_in_file, save, rename
 from conan.tools.env import VirtualRunEnv, VirtualBuildEnv
 from conan.tools.scm import Git
 from conan.tools.cmake import CMake, CMakeToolchain, cmake_layout, CMakeDeps
 from conan.tools.microsoft import VCVars
 from conan.tools.layout import basic_layout
 
-class ZenohCConan(ConanFile):
+class Iceoryx2Conan(ConanFile):
 
     name = "iceoryx2"
     version = "0.7.0"
@@ -33,12 +33,11 @@ class ZenohCConan(ConanFile):
         "build_testing": False,
     }
 
-    exports_sources = "CMakeLists.txt"
-
     def export(self):
         update_conandata(self, {"sources": {
             # "commit": "v{}".format(self.version),
-            "commit": "196c471bd2732ca1a53766c71223e36cba0eaaae",  # dec 2nd, 2025
+            "commit": "cca0ed330427fcca548af7a7c4954e26e6ec4ee0", # dec 3rd, 2025
+            #"commit": "196c471bd2732ca1a53766c71223e36cba0eaaae",  # dec 2nd, 2025
             "url": "https://github.com/eclipse-iceoryx/iceoryx2.git"
             }}
             )
@@ -62,6 +61,9 @@ class ZenohCConan(ConanFile):
     def is_win_x64(self):
         return self.settings.os == "Windows" and self.settings.arch == "x86_64"
 
+    def _patch_sources(self):
+        apply_conandata_patches(self)
+
     def generate(self):
 
         tc = CMakeToolchain(self)
@@ -83,15 +85,12 @@ class ZenohCConan(ConanFile):
         deps.generate()
 
     def layout(self):
-        cmake_layout(self)
-        # force custom build folder - maybe expected from the cmake scripts / cargo integration.
-        self.folders.build = "target/ff/cc/build"
-
-    def patch_sources(self):
-        pass
-
+        cmake_layout(self, 
+            src_folder="src",
+            build_folder="src/target/ff/cc/build")
+ 
     def build(self):
-        self.patch_sources()
+        self._patch_sources()
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
@@ -115,41 +114,21 @@ class ZenohCConan(ConanFile):
         return name
 
     def package(self):
-        if self.is_win:
-            bin_path = None
-            folder = "release" if self.settings.build_type == "Release" else "debug"
-            bin_path = os.path.join(self.build_folder, folder, "target", folder)
+        cmake = CMake(self)
+        cmake.install()
 
-            # clean up before recursive copy
-            rm(self, "*.dll", os.path.join(bin_path, "deps"))
-            rm(self, "*.lib", os.path.join(bin_path, "deps"))
-            # Manually copy the files in the target (needs to be adapted if debug build is enabled ..)
+        lib_build_path = os.path.join(self.build_folder, "iceoryx2-cxx")
 
-            copy(self, "*.dll", bin_path, os.path.join(self.package_folder, "bin"), keep_path=False)
-            copy(self, "*.lib", bin_path, os.path.join(self.package_folder, "lib"), keep_path=False)
-            copy(self, "*.h", os.path.join(self.build_folder, folder, "include"), os.path.join(self.package_folder, "include"))
-            copy(self, "*.h", os.path.join(self.source_folder, "include"), os.path.join(self.package_folder, "include"))
-        else:
-            cmake = CMake(self)
-            cmake.install()
-
-            lib_build_path = os.path.join(self.build_folder, "iceoryx2-cxx")
-
-            if self.settings.os == "Linux":
-                if self.options.shared:
-                    rm(self, "*.a", os.path.join(self.package_folder, "lib"), recursive=False)
-                else:
-                    rm(self, "*.so", os.path.join(self.package_folder, "lib"), recursive=False)
-            elif self.settings.os == "Macos":
-                if self.options.shared:
-                    rm(self, "*.a", os.path.join(self.package_folder, "lib"), recursive=False)
-                else:
-                    rm(self, "*.dylib", os.path.join(self.package_folder, "lib"), recursive=False)
-            elif self.is_win:
-                if self.options.shared:
-                    pass
-                else:
-                    rm(self, "*.dll", os.path.join(self.package_folder, "bin"), recursive=False)
+        if self.settings.os == "Linux":
+            if self.options.shared:
+                rm(self, "*.a", os.path.join(self.package_folder, "lib"), recursive=False)
+            else:
+                rm(self, "*.so", os.path.join(self.package_folder, "lib"), recursive=False)
+        elif self.settings.os == "Macos":
+            if self.options.shared:
+                rm(self, "*.a", os.path.join(self.package_folder, "lib"), recursive=False)
+            else:
+                rm(self, "*.dylib", os.path.join(self.package_folder, "lib"), recursive=False)
 
     def package_info(self):
         self.cpp_info.libs = [self._iceoryx2_c_lib_name(), self._iceoryx2_bb_cxx_lib_name(), self._iceoryx2_cxx_lib_name()]

@@ -1,0 +1,21 @@
+patches:
+  "0.7.0":
+    - patch_string: |
+        --- a/iceoryx2-bb/cxx/include/iox2/legacy/detail/convert.inl
+        --- a/iceoryx2-bb/cxx/include/iox2/legacy/detail/convert.inl
+        +++ b/iceoryx2-bb/cxx/include/iox2/legacy/detail/convert.inl
+        @@ -336,11 +336,11 @@ inline bool convert::is_within_range(const SourceType& source_val) noexcept {
+         #endif
+                 // special cases for floating point
+                 // can be nan or inf
+        -        if (std::isnan(source_val) || std::isinf(source_val)) {
+        +        if (std::isnan(static_cast<double>(source_val)) || std::isinf(static_cast<double>(source_val))) {
+                     return true;
+                 }
+                 // should be normal or zero
+        -        if (!std::isnormal(source_val) && (source_val_fp != 0.0F)) {
+        +        if (!std::isnormal(static_cast<double>(source_val)) && (source_val_fp != 0.0F)) {
+                     return false;
+                 }
+             }
+  
