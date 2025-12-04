@@ -135,31 +135,21 @@ class ZenohCConan(ConanFile):
 
             lib_build_path = os.path.join(self.build_folder, "iceoryx2-cxx")
 
-
-            # copy(self, "*.h", os.path.join(self.source_folder, "iceoryx2-cxx", "include"), os.path.join(self.package_folder, "include", "iceoryx2", f"v{self.version}"))
-            # copy(self, "*.hpp", os.path.join(self.source_folder, "iceoryx2-cxx", "include"), os.path.join(self.package_folder, "include", "iceoryx2", f"v{self.version}"))
-
             if self.settings.os == "Linux":
                 if self.options.shared:
-                    rm(self, "*.so", os.path.join(self.package_folder, "lib"), recursive=False)
-                    # copy(self, "*.so", lib_build_path, os.path.join(self.package_folder, "lib"), keep_path=False)
+                    rm(self, "*.a", os.path.join(self.package_folder, "lib"), recursive=False)
                 else:
                     rm(self, "*.so", os.path.join(self.package_folder, "lib"), recursive=False)
-                    # copy(self, "*.a", lib_build_path, os.path.join(self.package_folder, "lib"), keep_path=False)
             elif self.settings.os == "Macos":
                 if self.options.shared:
-                    rm(self, "*.dylib", os.path.join(self.package_folder, "lib"), recursive=False)
-                    # copy(self, "*.dylib", lib_build_path, os.path.join(self.package_folder, "lib"), keep_path=False)
+                    rm(self, "*.a", os.path.join(self.package_folder, "lib"), recursive=False)
                 else:
                     rm(self, "*.dylib", os.path.join(self.package_folder, "lib"), recursive=False)
-                    # copy(self, "*.a", lib_build_path, os.path.join(self.package_folder, "lib"), keep_path=False)
             elif self.is_win:
                 if self.options.shared:
                     pass
-                    # copy(self, "*.dll", lib_build_path, os.path.join(self.package_folder, "bin"), keep_path=False)
                 else:
                     rm(self, "*.dll", os.path.join(self.package_folder, "bin"), recursive=False)
-                    # copy(self, "*.lib", lib_build_path, os.path.join(self.package_folder, "lib"), keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = [self._iceoryx2_c_lib_name(), self._iceoryx2_bb_cxx_lib_name(), self._iceoryx2_cxx_lib_name()]
