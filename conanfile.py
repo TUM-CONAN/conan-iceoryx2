@@ -129,6 +129,8 @@ class Iceoryx2Conan(ConanFile):
                 rm(self, "*.a", os.path.join(self.package_folder, "lib"), recursive=False)
             else:
                 rm(self, "*.dylib", os.path.join(self.package_folder, "lib"), recursive=False)
+        elif self.is_win:
+            copy(self, "*.dll", os.path.join(self.package_folder, "lib"), os.path.join(self.package_folder, "bin"))
 
     def package_info(self):
         self.cpp_info.libs = [self._iceoryx2_c_lib_name(), self._iceoryx2_bb_cxx_lib_name(), self._iceoryx2_cxx_lib_name()]
