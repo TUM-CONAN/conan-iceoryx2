@@ -11,7 +11,7 @@ from conan.tools.layout import basic_layout
 class Iceoryx2Conan(ConanFile):
 
     name = "iceoryx2"
-    version = "0.7.0"
+    version = "0.8.0"
     
     license = "Apache License 2.0"
     author = "Ulrich Eck"
@@ -35,9 +35,7 @@ class Iceoryx2Conan(ConanFile):
 
     def export(self):
         update_conandata(self, {"sources": {
-            # "commit": "v{}".format(self.version),
-            "commit": "cca0ed330427fcca548af7a7c4954e26e6ec4ee0", # dec 3rd, 2025
-            #"commit": "196c471bd2732ca1a53766c71223e36cba0eaaae",  # dec 2nd, 2025
+            "commit": "v{}".format(self.version),
             "url": "https://github.com/eclipse-iceoryx/iceoryx2.git"
             }}
             )
@@ -101,12 +99,6 @@ class Iceoryx2Conan(ConanFile):
         #     name += "d"
         return name
 
-    def _iceoryx2_bb_cxx_lib_name(self):
-        name = "iceoryx2-bb-cxx"
-        # if self.settings.build_type == "Debug":
-        #     name += "d"
-        return name
-
     def _iceoryx2_c_lib_name(self):
         name = "iceoryx2_ffi_c"
         # if self.settings.build_type == "Debug":
@@ -133,5 +125,5 @@ class Iceoryx2Conan(ConanFile):
             copy(self, "*.dll", os.path.join(self.package_folder, "lib"), os.path.join(self.package_folder, "bin"))
 
     def package_info(self):
-        self.cpp_info.libs = [self._iceoryx2_c_lib_name(), self._iceoryx2_bb_cxx_lib_name(), self._iceoryx2_cxx_lib_name()]
+        self.cpp_info.libs = [self._iceoryx2_c_lib_name(), self._iceoryx2_cxx_lib_name()]
         self.cpp_info.includedirs.append(os.path.join("include", "iceoryx2", f"v{self.version}"))
