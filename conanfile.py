@@ -11,7 +11,7 @@ from conan.tools.layout import basic_layout
 class Iceoryx2Conan(ConanFile):
 
     name = "iceoryx2"
-    version = "0.8.0"
+    version = "0.8.1"
     
     license = "Apache License 2.0"
     author = "Ulrich Eck"
