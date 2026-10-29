@@ -1,0 +1,49 @@
+{
+    "version": 3,
+    "vendor": {
+        "conan": {}
+    },
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 15,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "conan-gcc-13-x86_64-20-release",
+            "displayName": "'conan-gcc-13-x86_64-20-release' config",
+            "description": "'conan-gcc-13-x86_64-20-release' configure using 'Unix Makefiles' generator",
+            "generator": "Unix Makefiles",
+            "cacheVariables": {
+                "CMAKE_POLICY_DEFAULT_CMP0091": "NEW",
+                "CMAKE_BUILD_TYPE": "Release"
+            },
+            "environment": {
+                "CXX": "g++-13",
+                "CC": "gcc-13"
+            },
+            "toolchainFile": "generators/conan_toolchain.cmake",
+            "binaryDir": "/home/ecku/develop/recipes/conan-iceoryx2/test_package/build/gcc-13-x86_64-20-release"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "conan-gcc-13-x86_64-20-release",
+            "configurePreset": "conan-gcc-13-x86_64-20-release",
+            "jobs": 64
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "conan-gcc-13-x86_64-20-release",
+            "configurePreset": "conan-gcc-13-x86_64-20-release",
+            "execution": {
+                "jobs": 64
+            },
+            "environment": {
+                "LD_LIBRARY_PATH": "/home/ecku/.conan2/p/b/iceor93aea0772d84b/p/lib:$penv{LD_LIBRARY_PATH}",
+                "DYLD_LIBRARY_PATH": "/home/ecku/.conan2/p/b/iceor93aea0772d84b/p/lib:$penv{DYLD_LIBRARY_PATH}"
+            }
+        }
+    ]
+}

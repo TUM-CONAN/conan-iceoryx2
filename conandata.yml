@@ -1,4 +1,26 @@
 patches:
+  "0.9.3-holoscan":
+    - patch_file: "patches/0001-add-sample-released-handler.patch"
+      patch_description: "add sample released handler"
+      patch_type: "portability"
+    - patch_file: "patches/0002-add-sample-replaced-handler.patch"
+      patch_description: "add sample replaced handler"
+      patch_type: "portability"
+    - patch_file: "patches/0003-defer-blocking-send-wait-setup.patch"
+      patch_description: "defer blocking send wait setup"
+      patch_type: "portability"
+    - patch_file: "patches/0004-name-library-install-component.patch"
+      patch_description: "name library install component"
+      patch_type: "portability"
+    - patch_file: "patches/0005-clean-cargo-target-directory.patch"
+      patch_description: "clean cargo target directory"
+      patch_type: "portability"
+    - patch_file: "patches/0006-accept-cargo-source-build.patch"
+      patch_description: "accept cargo source build"
+      patch_type: "portability"
+    - patch_file: "patches/0007-add-soname-to-iceoryx2-ffi.patch"
+      patch_description: "add soname to iceoryx2 ffi"
+      patch_type: "portability"
   "0.7.0":
     - patch_string: |
         --- a/iceoryx2-bb/cxx/include/iox2/legacy/detail/convert.inl

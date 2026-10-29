@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.22)
+project(test_package LANGUAGES CXX)
+# The upstream CMake config, as Holoscan's HoloMQ finds it (find_package(iceoryx2-cxx CONFIG)).
+find_package(iceoryx2-cxx CONFIG REQUIRED)
+add_executable(test_package test_package.cpp)
+target_compile_features(test_package PRIVATE cxx_std_17)
+if(TARGET iceoryx2-cxx::shared-lib-cxx)
+    target_link_libraries(test_package PRIVATE iceoryx2-cxx::shared-lib-cxx)
+else()
+    target_link_libraries(test_package PRIVATE iceoryx2-cxx::static-lib-cxx)
+endif()
